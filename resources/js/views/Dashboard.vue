@@ -10,7 +10,6 @@
                         <example-component></example-component>
 
                     </div>
-                    <demand-wizard></demand-wizard>
                 </div>
             </div>
         </div>
@@ -20,10 +19,9 @@
 
 <script>
 import DemandModal from '../components/demandModal.vue'
-import DemandWizard from '../components/DemandWizard.vue'
 import ExampleComponent from '../components/ExampleComponent.vue'
     export default {
-  components: { ExampleComponent, DemandModal, DemandWizard },
+  components: { ExampleComponent, DemandModal },
         data() {
             return {
                 'header': 'Dashboard'

@@ -28,7 +28,7 @@ class Demande extends Model
     {
         return $this->morphedByMany(Subcategory::class , 'demandable')->withTimestamps();
     }
-    public function subcategorie2()
+    public function subcategory2s()
     {
         return $this->morphedByMany(Subcategory2::class , 'demandable')->withTimestamps();
     }
@@ -117,11 +117,13 @@ class Demande extends Model
 
     public function notify_interresters()
     {
+        // dd($this->type[0]->interesters);
         $demander = $this->demander;
+        // dd($demander->id);
         $ids = [];
         $modeles = $this->modeles;
         $marques = $this->marques;
-        $type  = $this->type;
+        $type  = $this->types[0];
 
         /**
          * les vendeur des pieces des voitures sont généralement specialisés dans quelque
@@ -132,7 +134,7 @@ class Demande extends Model
          */
 
         if ($type->id == 2)  //  leger
-        {
+        {/*
             if(count($this->subcategories))
             {
                 $subcategory = $this->subcategories[0];
@@ -174,9 +176,10 @@ class Demande extends Model
                     }
                 }
             }
-        }
-       else
-        {
+        */}
+
+        else
+            {
             foreach ($type->interesters as $user)
             {
                 if (!in_array($user->id , $ids) and $user->id != $demander->id)
@@ -186,6 +189,6 @@ class Demande extends Model
                 }
             }
             }
-
     }
+// }
 }

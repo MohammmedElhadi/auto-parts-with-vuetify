@@ -7,10 +7,12 @@
                 </v-btn>
             </template>
             <v-card>
+
                 <v-card-title>
                     <span class="text-h5">Nouvelle demande</span>
                 </v-card-title>
                 <v-stepper v-model="e1">
+
                     <v-card-text>
                         <v-container>
                             <v-stepper-header>
@@ -38,6 +40,7 @@
                                             <v-autocomplete
                                                 :items="types"
                                                 item-text="nom_ar"
+                                                item-value="id"
                                                 label="Type de la véhicule"
                                                 required
                                                 v-model="demand.type"
@@ -61,6 +64,7 @@
                                             <v-autocomplete
                                                 :items="modeles"
                                                 item-text="nom_ar"
+                                                item-value="id"
                                                 label="Modele de la véhicule"
                                                 v-model="demand.modele"
                                                 required
@@ -156,13 +160,12 @@
                                             </v-autocomplete>
                                         </v-col >
                                         <v-col  cols="12">
-                                            <form action="#">
+
                                                 <v-file-input
                                                 label="Photos de la pièce"
                                                 filled
                                                 prepend-icon="mdi-camera"
-                                                v-model="demand.image" />
-                                            </form>
+                                             />
 
                                         </v-col>
                                         <v-col  cols="12">
@@ -205,12 +208,13 @@
                             color="blue darken-1"
                             text
                              v-show="e1 == 3"
-                            @click="submitDemande()"
+                            @click.prevent="submitDemande()"
                         >
                             Envoyer la demande
                         </v-btn>
                     </v-card-actions>
                 </v-stepper>
+
             </v-card>
         </v-dialog>
          <v-snackbar v-model="snackbar" color="success" left>
@@ -218,7 +222,7 @@
 
             <template v-slot:action="{ attrs }">
                 <v-btn
-                    color="pink"
+                    color="black"
                     text
                     v-bind="attrs"
                     @click="snackbar = false"
@@ -237,16 +241,16 @@ export default {
         e1: 1,
         dialog: false,
         demand:{
-            type: "",
-            marque: "",
-            modele: "",
-            category: "",
-            subcategory: "",
-            subsubcategory: "",
-            image: null,
-            etat: "",
-            note: "",
-            wilaya: "",
+                    type: "",
+                    marque: "",
+                    modele: "",
+                    category: "",
+                    subcategory: "",
+                    subsubcategory: "",
+                    image: null,
+                    etat: "",
+                    note: "",
+                    wilaya: "",
         },
         types: [],
         marques: [],
@@ -357,14 +361,15 @@ export default {
         submitDemande(){
              axios
                 .post(route("demande.store") , {
-                    demand : this.demand
-
-                })
+                        demand : this.demand }
+                      )
                 .then((response) => {
                     if(response.status == 200){
+
                     this.dialog = false
-                    this.text = response.data;
-                    this.snackbar = true;
+                    console.log( response );
+                    // this.snackbar = true;
+                   this.$swal('Hello Vue world!!!');
                     }
                 })
                 .catch((error) => {

@@ -1439,6 +1439,7 @@ class DatabaseSeeder extends Seeder
         // $user->pieces()->attach([1 , 2 , 3 , 4]);
         $user->categories()->attach([1 , 2 , 3 , 4]);
         $user->subcategories()->attach([1 , 2 , 3 , 4]);
+        $user->types()->attach([1]);
 
         $user = User::find(2);
         $user->modeles()->attach([3,4,5,6]);
@@ -1446,6 +1447,7 @@ class DatabaseSeeder extends Seeder
         // $user->pieces()->attach([3,4,5,6]);
         $user->categories()->attach([3,4,5,6]);
         $user->subcategories()->attach([3,4,5,6]);
+        $user->types()->attach([3]);
 
         $user = User::find(3);
         $user->modeles()->attach([4,5,6,7]);
@@ -1453,6 +1455,7 @@ class DatabaseSeeder extends Seeder
         // $user->pieces()->attach([4,5,6,7]);
         $user->categories()->attach([4,5,6,7]);
         $user->subcategories()->attach([4,5,6,7]);
+        $user->types()->attach([2]);
 
         // $pieces = Piece::all();
         // foreach($pieces as $piece){

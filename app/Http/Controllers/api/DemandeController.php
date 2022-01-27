@@ -4,7 +4,10 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Demande;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DemandeController extends Controller
 {
@@ -36,14 +39,44 @@ class DemandeController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->demand);
-        Demande::create([
-            'user_id'=> 2,
-            'wilaya_id'=> $request->demand["wilaya"],
-            'etat_id'=> $request->demand["etat"],
-            'note'=> $request->demand['note']
-        ]);
-        return session('success' , 'demande créée avec succés');
+        // return $request;
+        DB::beginTransaction();
+        try{
+            //dd($request->demand);
+            $demande = Demande::create([
+                'user_id'=> 1,
+                // 'user_id'=> Auth::id(),
+                'wilaya_id'=> $request->demand["wilaya"],
+                // 'wilaya_id'=> Auth::user()->wilaya->id,
+                'etat_id'=> $request->demand["etat"],
+                'note'=> $request->demand['note']
+            ]);
+            // if($request->hasFile('images')){
+            //     //create pieces jointe
+            //     foreach($request->images  as $file)
+            //     {
+            //         $url = $file->store('images');
+            //         $im = new Image;
+            //         $im->url = $url;
+            //         $demande->images()->save($im);
+            //     }
+            // }
+
+            $demande->categories()->attach($request->demand['category']);
+            $demande->subcategories()->attach($request->demand['subcategory']);
+            $demande->subcategory2s()->attach($request->demand['subsubcategory']);
+            $demande->marques()->attach($request->demand['marque']);
+            $demande->modeles()->attach($request->demand['modele']);
+            $demande->types()->attach($request->demand['type']);
+
+            $demande->notify_interresters();
+            DB::commit();
+        }
+        catch (Exception $e) {
+            DB::rollBack();
+            dd($e);
+        }
+        return response()->json($demande->id);
     }
 
     /**
