@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-        <v-dialog v-model="dialog" persistent max-width="800px">
+        <v-dialog v-model="dialog"  max-width="800px">
             <template v-slot:activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on">
                     Nouvelle demande
@@ -41,6 +41,7 @@
                                                 :items="types"
                                                 item-text="nom_ar"
                                                 item-value="id"
+                                                :rules="[v => !!v || 'Item is required']"
                                                 label="Type de la véhicule"
                                                 required
                                                 v-model="demand.type"
@@ -95,7 +96,6 @@
                                                 item-text="nom_fr"
                                                 item-value="id"
                                                 label="Sous categorie de la piece"
-                                                required
                                                 v-model="demand.subcategory"
                                                 @change="
                                                     getSubSubCategories($event)
@@ -109,7 +109,6 @@
                                                 item-text="nom_fr"
                                                 item-value="id"
                                                 label="Sous sous categorie de la piece"
-                                                required
                                                 v-model="demand.subsubcategory"
                                             ></v-autocomplete>
                                         </v-col>
@@ -135,6 +134,7 @@
                                                 item-text="code"
                                                 item-value="id"
                                                 label="Wilaya de la demande"
+                                                prepend-icon="mdi-google-maps"
                                                 required
                                                 v-model="demand.wilaya"
                                             >
@@ -155,6 +155,7 @@
                                                 label="Etat de la pièce"
                                                 required
                                                 v-model="demand.etat"
+
                                             >
 
                                             </v-autocomplete>
@@ -207,7 +208,8 @@
                         <v-btn
                             color="blue darken-1"
                             text
-                             v-show="e1 == 3"
+                            v-show="e1 == 3"
+
                             @click.prevent="submitDemande()"
                         >
                             Envoyer la demande
@@ -282,6 +284,7 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 });
+
         },
         getModeles(id) {
             this.modeles = [];

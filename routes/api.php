@@ -6,6 +6,7 @@ use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\api\DemandeController;
 use App\Http\Controllers\api\EtatController;
 use App\Http\Controllers\api\MarqueController;
+use App\Http\Controllers\api\NotificationController;
 use App\Http\Controllers\api\SubcategoryController;
 use App\Http\Controllers\api\TypeController as ApiTypeController;
 use App\Http\Controllers\api\WilayaController;
@@ -43,5 +44,6 @@ Route::resource('category', CategoryController::class);
 Route::resource('wilaya', WilayaController::class);
 Route::resource('demande', DemandeController::class);
 Route::resource('etat', EtatController::class);
+Route::resource('notification', NotificationController::class);
 
 

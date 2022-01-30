@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Events\NewDemandeAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Demande;
 use Exception;
@@ -18,7 +19,25 @@ class DemandeController extends Controller
      */
     public function index()
     {
-        //
+
+        $data = [];
+            foreach (Demande::orderBy('created_at' , "desc")->get() as $demande)
+            {
+                // dd($demande->marques->first());
+                array_push($data , [
+                    'demande' => $demande,
+                    'type'    => $demande->types ? $demande->types[0] : '',
+                    'category'    => $demande->categories ? $demande->categories->first(): '',
+                    'subcategory'    =>$demande->subcategories?  $demande->subcategories->first() : '',
+                    'subcategory2'    =>$demande->subcategory2s ? $demande->subcategory2s->first() : '',
+                    'marque'    =>$demande->marques ?   $demande->marques->first() : '',
+                    'modele'    =>$demande->modeles ? $demande->modeles->first() : '',
+                ]);
+            }
+
+        // return response()->json(5);
+        // return response()->json(Demande::all());
+        return $data;
     }
 
     /**
@@ -70,6 +89,7 @@ class DemandeController extends Controller
             $demande->types()->attach($request->demand['type']);
 
             $demande->notify_interresters();
+            event(new NewDemandeAdded($demande->id));
             DB::commit();
         }
         catch (Exception $e) {

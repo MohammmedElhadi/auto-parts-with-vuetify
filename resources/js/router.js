@@ -2,12 +2,18 @@ import Vue from 'vue';
 import VueRouter from 'vue-router'
 import Dashboard from './views/Dashboard'
 import Products from './views/Products'
+import DemandesList from './views/DemandesList'
 Vue.use(VueRouter);
 const routes = [
     {
         path: '/',
         name: 'dashboard',
         component: Dashboard
+    },
+    {
+        path: '/demandes',
+        name: 'demandes',
+        component: DemandesList
     },
     {
         path: '/products',
