@@ -288,7 +288,6 @@ export default {
         },
         getModeles(id) {
             this.modeles = [];
-            console.log(id);
             axios
                 .get(route("marque.modeles", id))
                 .then((repsponse) => {
@@ -297,7 +296,6 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 });
-            console.log(this.modeles);
         },
         //step 2
         getCategories() {
@@ -368,11 +366,9 @@ export default {
                       )
                 .then((response) => {
                     if(response.status == 200){
-
                     this.dialog = false
-                    console.log( response );
                     // this.snackbar = true;
-                   this.$swal('Hello Vue world!!!');
+                   this.$swal('Demande créée avec succés!');
                     }
                 })
                 .catch((error) => {
@@ -387,12 +383,10 @@ export default {
         },
     },
     created() {
-        console.log("created");
         this.getTypes();
         this.getCategories();
         this.getWilayas();
         this.getEtat();
-        console.log(this.types);
     },
 };
 </script>

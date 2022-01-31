@@ -1439,7 +1439,7 @@ class DatabaseSeeder extends Seeder
         // $user->pieces()->attach([1 , 2 , 3 , 4]);
         $user->categories()->attach([1 , 2 , 3 , 4]);
         $user->subcategories()->attach([1 , 2 , 3 , 4]);
-        $user->types()->attach([1]);
+        $user->types()->attach([1 , 3]);
 
         $user = User::find(2);
         $user->modeles()->attach([3,4,5,6]);

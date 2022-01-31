@@ -89,7 +89,7 @@ class DemandeController extends Controller
             $demande->types()->attach($request->demand['type']);
 
             $demande->notify_interresters();
-            event(new NewDemandeAdded($demande->id));
+            event(new NewDemandeAdded($demande));
             DB::commit();
         }
         catch (Exception $e) {

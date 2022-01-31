@@ -37,7 +37,7 @@
             <demand-modal></demand-modal>
             <v-spacer></v-spacer>
             <v-menu
-                v-model="menu"
+
                 :close-on-content-click="false"
                 :nudge-width="200"
                 offset-x
@@ -47,7 +47,7 @@
                     <v-btn v-bind="attrs" v-on="on" icon>
                         <v-badge
                             v-if="notifications"
-                            :content="notifications.length"
+                            :content="notifications_count"
                             :value="notifications.length"
                             color="red"
                         >
@@ -80,22 +80,11 @@
                             :key="index">
                             <v-list-item>
                                 <v-list-item-title
-                                    >{{notification.type}}</v-list-item-title
+                                    >Demande ajoutée N° <strong>{{notification.data.demande.id}}</strong></v-list-item-title
                                 >
-                            <v-list-item-icon>
-                                <v-icon>mdi-format-list-bulleted-type</v-icon>
-                            </v-list-item-icon>
                             </v-list-item>
                         </div>
                     </v-list>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-
-                        <v-btn text @click="menu = false"> Cancel </v-btn>
-                        <v-btn color="primary" text @click="menu = false">
-                            Save
-                        </v-btn>
-                    </v-card-actions>
                 </v-card>
             </v-menu>
         </v-app-bar>
@@ -122,6 +111,7 @@ export default {
     data: () => ({
         drawer: null,
         notifications: null,
+        notifications_count: 0,
     }),
     methods: {
         getNotifications() {
@@ -129,7 +119,8 @@ export default {
                 .get(route("notification.index"))
                 .then((repsponse) => {
                     this.notifications = repsponse.data;
-                    console.log(this.notifications.length);
+                    this.notifications_count = this.notifications.length
+                     console.log(this.notifications[0].data.demande.id);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -139,7 +130,18 @@ export default {
     created() {
         this.$vuetify.theme.dark = true;
         this.getNotifications();
-        //console.log(vuVar)
+
+        this.$echo.channel('demands_channel').listen('NewDemandeAdded', (payload) => {
+            console.log('payload');
+            console.log(payload.demande);
+            this.notifications.push(payload.demande);
+            this.notifications_count++
+            this.$toasted.success('hello billo', {
+                theme: "toasted-primary",
+                position: "top-left",
+                duration : 5000
+            })
+        })
     },
 };
 </script>

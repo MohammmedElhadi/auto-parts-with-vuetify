@@ -15,7 +15,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        return (User::find(2)->unreadNotifications);
+        return (User::find(12)->unreadNotifications);
     }
 
     /**

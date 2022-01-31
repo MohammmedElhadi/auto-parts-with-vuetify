@@ -56,7 +56,8 @@ class TypeNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'newDemande' => $this->demande
+            'demande' => $this->demande,
+            'type'    => $this->demande->types ? $this->demande->types[0] : '',
         ];
     }
     public function toBroadcast($notifiable)
