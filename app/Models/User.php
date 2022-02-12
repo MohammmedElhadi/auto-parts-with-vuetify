@@ -46,6 +46,11 @@ class User extends Authenticatable
     ];
 
 
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'users.'.$this->id;
+    }
+
 
       /**
      * The demandes that belong to the User

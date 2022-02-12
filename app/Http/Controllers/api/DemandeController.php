@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Events\NewDemandeAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Demande;
+use App\Models\Reponse;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -107,7 +108,12 @@ class DemandeController extends Controller
      */
     public function show($id)
     {
-        //
+        //dd(Demande::find($id));
+        $demande = Demande::find($id);
+        return response()->json([
+            'data' => $demande,
+            'type'    => $demande->types[0]
+        ]);
     }
 
     /**
@@ -142,5 +148,12 @@ class DemandeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function SubmitOffer(Request $request)
+    {
+        $offer  = Reponse::create($request->offer);
+        return response()->json($offer);
     }
 }

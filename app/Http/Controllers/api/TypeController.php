@@ -17,8 +17,6 @@ class TypeController extends Controller
     {
         // dd(Type::orderBy('created_at')->get());
         return response()->json( Type::all());
-
-        dd(Type::find(1)->interresters);
     }
 
     /**

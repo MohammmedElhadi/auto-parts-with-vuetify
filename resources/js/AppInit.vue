@@ -2,7 +2,7 @@
     <v-app id="inspire">
         <v-navigation-drawer v-model="drawer" app clipped>
             <v-list dense>
-                <v-list-item link to="/">
+                <v-list-item link to="/api">
                     <v-list-item-action>
                         <v-icon>mdi-view-dashboard</v-icon>
                     </v-list-item-action>
@@ -10,7 +10,7 @@
                         <v-list-item-title>Dashboard</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/demandes">
+                <v-list-item link :to="{ name: 'demandes' }">
                     <v-list-item-action>
                         <v-icon>mdi-buffer</v-icon>
                     </v-list-item-action>
@@ -18,13 +18,19 @@
                         <v-list-item-title>Demandes</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/products">
+                <v-list-item link :to="{ name: 'products' }">
                     <v-list-item-action>
                         <v-icon>mdi-buffer</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Products</v-list-item-title>
                     </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-switch
+                    v-model="$vuetify.theme.dark"
+                    label="dark"
+                ></v-switch>
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
@@ -36,56 +42,31 @@
             <v-toolbar-title>Application</v-toolbar-title>
             <demand-modal></demand-modal>
             <v-spacer></v-spacer>
-            <v-menu
 
+            <v-menu
                 :close-on-content-click="false"
                 :nudge-width="200"
                 offset-x
                 left
             >
+
+
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn v-bind="attrs" v-on="on" icon>
                         <v-badge
                             v-if="notifications"
                             :content="notifications_count"
-                            :value="notifications.length"
+                            :value="notifications_count"
                             color="red"
                         >
                             <v-icon>mdi-bell</v-icon>
                         </v-badge>
                     </v-btn>
                 </template>
-
-                <v-card>
-                    <v-list>
-                        <v-list-item>
-                            <v-list-item-content>
-                                <v-list-item-title
-                                    >Notifications</v-list-item-title
-                                >
-                            </v-list-item-content>
-                            <v-list-item-action>
-                                <v-btn icon>
-                                    <v-icon>mdi-radiobox-marked</v-icon>
-                                </v-btn>
-                            </v-list-item-action>
-                        </v-list-item>
-                    </v-list>
-
-                    <v-divider></v-divider>
-
-                    <v-list>
-                        <div
-                            v-for="(notification, index) in this.notifications"
-                            :key="index">
-                            <v-list-item>
-                                <v-list-item-title
-                                    >Demande ajoutée N° <strong>{{notification.data.demande.id}}</strong></v-list-item-title
-                                >
-                            </v-list-item>
-                        </div>
-                    </v-list>
-                </v-card>
+                <notifications
+                    :notifications="notifications"
+                    :key="notificationKey"
+                ></notifications>
             </v-menu>
         </v-app-bar>
 
@@ -103,45 +84,61 @@
 
 <script>
 import demandModal from "./components/demandModal.vue";
+import Notifications from "./components/notifications.vue";
 export default {
-    components: { demandModal },
+    components: { demandModal, Notifications },
     props: {
-        source: String,
+        Notificationssource: String,
     },
     data: () => ({
         drawer: null,
         notifications: null,
-        notifications_count: 0,
+        notificationKey: 0,
+
     }),
     methods: {
+        forceRerenderNotifications() {
+            this.notificationKey += 1;
+        },
         getNotifications() {
             axios
                 .get(route("notification.index"))
                 .then((repsponse) => {
                     this.notifications = repsponse.data;
-                    this.notifications_count = this.notifications.length
-                     console.log(this.notifications[0].data.demande.id);
+                    // console.log(this.notifications[0]);
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
     },
+    computed: {
+        notifications_count() {
+            return this.notifications.length;
+        },
+    },
     created() {
         this.$vuetify.theme.dark = true;
         this.getNotifications();
-
-        this.$echo.channel('demands_channel').listen('NewDemandeAdded', (payload) => {
-            console.log('payload');
-            console.log(payload.demande);
-            this.notifications.push(payload.demande);
-            this.notifications_count++
-            this.$toasted.success('hello billo', {
-                theme: "toasted-primary",
-                position: "top-left",
-                duration : 5000
-            })
-        })
+        // this.$echo.private('App.Models.User.'+'12')
+        //         .notification((notification) => {
+        //             console.log(notification.type);
+        //         });
+        this.$echo
+            .channel("demands_channel")
+            .listen("NewDemandeAdded", (payload) => {
+                console.log("payload");
+                console.log(payload["data"]);
+                console.log("noties");
+                console.log(this.notifications[0]);
+                this.notifications.unshift(payload["data"]);
+                this.$toasted.success("ssss", {
+                    theme: "toasted-primary",
+                    position: "top-left",
+                    duration: 5000,
+                });
+                this.forceRerenderNotifications();
+            });
     },
 };
 </script>
