@@ -18,6 +18,7 @@
 
     </app-init>
 </div>
+<a href="{{route('login')}}">login</a>
 @routes
 <script src="{{ mix('js/app.js') }}"></script>
 </body>

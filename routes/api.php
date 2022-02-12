@@ -39,6 +39,9 @@ Route::controller(CategoryController::class)->group(function () {
 Route::controller(SubcategoryController::class)->group(function () {
     Route::get('subcategory/{id}/subcategory2s','getSubSubCategories')->name('subcategory.subcategory2s');
 });
+Route::controller(DemandeController::class)->group(function () {
+    Route::post('demande/{id}/offer','SubmitOffer')->name('demande.offer');
+});
 Route::resource('marque',MarqueController::class);
 Route::resource('category', CategoryController::class);
 Route::resource('wilaya', WilayaController::class);

@@ -16,14 +16,14 @@ class CreateReponsesTable extends Migration
         Schema::create('reponses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
             $table->foreignId('demande_id')->constrained()
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
             $table->foreignId('wilaya_id')->constrained()
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                                        ->onUpdate('cascade')
+                                        ->onDelete('cascade');
             // $table->unsignedBigInteger('piece_id')->nullable();
             $table->unsignedBigInteger('etat_id')->nullable();
             $table->integer('quantity_fourni')->nullable();

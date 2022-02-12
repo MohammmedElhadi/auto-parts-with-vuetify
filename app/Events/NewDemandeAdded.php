@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -15,7 +16,7 @@ class NewDemandeAdded implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
 
-    public $demande;
+    public $data;
     /**
      * Create a new event instance.
      *
@@ -23,7 +24,10 @@ class NewDemandeAdded implements ShouldBroadcast
      */
     public function __construct($demande)
     {
-        $this->demande = $demande;
+        $this->data = [
+                        'demande' =>$demande,
+                     ];
+        // $this->demande = User::find(12)->notifications()->latest()->first()['data'];
     }
 
     /**

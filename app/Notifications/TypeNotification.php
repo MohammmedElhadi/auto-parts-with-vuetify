@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Demande;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -57,13 +58,17 @@ class TypeNotification extends Notification
     {
         return [
             'demande' => $this->demande,
-            'type'    => $this->demande->types ? $this->demande->types[0] : '',
+            // 'type'    => $this->demande->types ? $this->demande->types[0] : '',
         ];
     }
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'notification' => $notifiable->notifications()->latest()->first(),
+            'demande' => $this->demande,
         ]);
+    }
+    public function broadcastType()
+    {
+        return 'type';
     }
 }

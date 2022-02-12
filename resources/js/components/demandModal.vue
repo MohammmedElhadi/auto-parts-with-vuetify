@@ -377,10 +377,6 @@ export default {
         }
     },
     computed: {
-        url() {
-            if (!this.demand.image) return;
-              return URL.createObjectURL(this.demand.image);
-        },
     },
     created() {
         this.getTypes();
