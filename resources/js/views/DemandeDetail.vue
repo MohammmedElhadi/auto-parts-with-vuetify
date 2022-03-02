@@ -1,147 +1,124 @@
 <template>
+    <!-- <demande :demande = "demande"  :wilayas="wilayas" :etats="etats" ></demande> -->
     <!-- <div id="demandeDetail" > -->
-    <div id="demandeDetail" :key="demande.data.id">
-        <v-card class="pa-2" cla ss="mx-auto" outlined>
-            <v-list-item three-line>
-                <v-list-item-content>
-                    <div class="text-overline mb-4">
-                        Demande n° : #{{ demande.data.id }}
-                        <v-icon>mdi-google-maps</v-icon
-                        >{{ demande.data.wilaya_id }}
-                    </div>
-                    <v-spacer></v-spacer>
-                    <v-list-item-title class="text-h5 mb-1">
-                        <v-row>
-                            <v-col>
-                                <v-chip
-                                    close-icon="mdi-close-outline"
-                                    color="red"
-                                    outlined
-                                    >{{ demande.type.nom_fr }}</v-chip
-                                >
-                                <v-chip
-                                    v-if="demande.category"
-                                    close-icon="mdi-close-outline"
-                                    color="yellow"
-                                    outlined
-                                    >{{ demande.category.nom_fr }}</v-chip
-                                >
-                            </v-col>
-                            <v-spacer></v-spacer>
-                            <v-col>
-                                <v-chip
-                                    v-if="demande.marque"
-                                    close-icon="mdi-close-outline"
-                                    color="green"
-                                    outlined
-                                    >{{ demande.marque.nom_fr }}</v-chip
-                                >
+    <div id="demandeDetail">
+       <v-card class="pa-2 mx-auto elevation-5" outlined>
+            <v-img
+                height="300"
+                src="https://www.swag.de/fileadmin/revolution/slide-content-3.png"
+            ></v-img>
+            <v-card-title>Demande n° : #{{ data.demande.id }}</v-card-title>
+            <v-card-text>
+                <v-chip-group column>
+                    <v-chip
+                        small
+                        close-icon="mdi-close-outline"
+                        color="red"
+                        outlined
+                        >{{ data.type.nom_fr }}</v-chip
+                    >
+                    <v-chip
+                        small
+                        v-if="data.category"
+                        close-icon="mdi-close-outline"
+                        color="warning"
+                        outlined
+                        >{{ data.category.nom_fr }}</v-chip
+                    >
+                    <v-chip
+                        small
+                        v-if="data.marque"
+                        close-icon="mdi-close-outline"
+                        color="success"
+                        outlined
+                        >{{ data.marque.nom_fr }}</v-chip
+                    >
 
-                                <v-chip
-                                    v-if="demande.modele"
-                                    close-icon="mdi-close-outline"
-                                    color="green"
-                                    outlined
-                                    >{{ demande.modele.nom_fr }}</v-chip
-                                >
-                            </v-col>
-                        </v-row>
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                        <div v-if="demande.marque"></div>
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle>
-                        <v-expansion-panels>
-                            <v-expansion-panel>
-                                <v-expansion-panel-header
-                                    expand-icon="mdi-menu-down"
-                                >
-                                    Détail
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content
-                                    >{{ demande.data.note }}
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                        </v-expansion-panels>
-                    </v-list-item-subtitle>
-                  <v-img
-            src="https://www.swag.de/fileadmin/revolution/slide-content-3.png"
-        ></v-img>
-                </v-list-item-content>
-            </v-list-item>
-
-            <v-card-actions>
-                <v-expansion-panels accordion>
-                    <v-expansion-panel>
-                        <v-expansion-panel-header>
-                            Offer
-                        </v-expansion-panel-header>
-                        <v-expansion-panel-content>
-                            <v-row>
-                                <v-col md="6" cols="12">
-                                    <v-autocomplete
-                                        dense
-                                        :items="wilayas"
-                                        item-text="code"
-                                        item-value="id"
-                                        label="Wilaya de la demande"
-                                        prepend-icon="mdi-google-maps"
-                                        required
-                                        v-model="offer.wilaya_id"
-                                    >
-                                        <template v-slot:item="slotProps"
-                                            >{{ slotProps.item.code }}-{{
-                                                slotProps.item.name
-                                            }}
-                                        </template>
-                                    </v-autocomplete>
-                                </v-col>
-                                <v-col md="6" cols="12" >
-                                    <!-- etat -->
-                                    <v-autocomplete
-                                        dense
-                                        :items="etats"
-                                        item-text="nom_fr"
-                                        item-value="id"
-                                        label="Etat de la pièce"
-                                        prepend-icon="mdi-circle"
-                                        required
-                                        v-model="offer.etat_id"
-                                    >
-                                    </v-autocomplete>
-                                </v-col>
-                            </v-row>
-
-                            <v-text-field
+                    <v-chip
+                        small
+                        v-if="data.modele"
+                        close-icon="mdi-close-outline"
+                        color="success"
+                        outlined
+                        >{{ data.modele.nom_fr }}</v-chip
+                    >
+                </v-chip-group>
+                 <v-icon small>mdi-google-maps</v-icon> {{wilaya}}
+            <v-divider></v-divider>
+            <v-icon small>mdi-note</v-icon>{{data.demande.note}}
+            </v-card-text>
+            <v-card-text>
+                {{ data.demande.note }}
+            </v-card-text>
+            <v-expansion-panels  accordion >
+            <v-expansion-panel>
+                <v-expansion-panel-header> Donner un offre </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                    <v-row>
+                        <v-col cols="12">
+                            <v-autocomplete
                                 dense
-                                placeholder="Prix offert"
-                                v-model="offer.prix_offert"
-                                prepend-icon="mdi-circle"
-                                suffix="DZD"
-                            ></v-text-field>
-                              <v-textarea
-                                                clearable
-                                                auto-grow
-                                                dense
-                                                clear-icon="mdi-close-circle"
-                                                label="Description"
-                                                v-model="offer.note"
-                                            ></v-textarea>
-                            <v-btn
-                                dense
-                                fa-flip-horizontal
-                                outlined
-                                rounded
-                                text
-                                color="success"
-                                @click="SubmitOffer()"
+                                :items="wilayas"
+                                item-text="name"
+                                item-value="id"
+                                label="Votre wilaya"
+                                prepend-icon="mdi-google-maps"
+                                required
+                                v-model="offer.wilaya_id"
                             >
-                                Reppondre
-                            </v-btn>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel>
-                </v-expansion-panels>
-            </v-card-actions>
+                                <template v-slot:item="slotProps"
+                                    >{{ slotProps.item.code }}-{{
+                                        slotProps.item.name
+                                    }}
+                                </template>
+                            </v-autocomplete>
+                        </v-col>
+                        <v-col cols="12">
+                            <!-- etat -->
+                            <v-autocomplete
+                                dense
+                                :items="etats"
+                                item-text="nom_fr"
+                                item-value="id"
+                                label="Etat de la pièce"
+                                prepend-icon="mdi-circle"
+                                required
+                                v-model="offer.etat_id"
+                            >
+                            </v-autocomplete>
+                        </v-col>
+                    </v-row>
+
+                    <v-text-field
+                        dense
+                        placeholder="Prix offert"
+                        v-model="offer.prix_offert"
+                        prepend-icon="mdi-currency-usd"
+                        suffix="DZD"
+                    ></v-text-field>
+                    <v-textarea
+                        clearable
+                        auto-grow
+                        dense
+                        clear-icon="mdi-close-circle"
+                        label="Description"
+                        prepend-icon="mdi-note"
+                        v-model="offer.note"
+                    ></v-textarea>
+                    <v-btn
+                        dense
+                        fa-flip-horizontal
+                        outlined
+                        rounded
+                        text
+                        color="success"
+                        @click="SubmitOffer()"
+                    >
+                        Reppondre
+                    </v-btn>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-expansion-panels>
         </v-card>
     </div>
 </template>
@@ -156,30 +133,36 @@ export default {
     data: () => ({
         etats: [],
         wilayas: [],
-        demande: null,
+        wilaya:'',
         offer: {
             user_id: 10, // get the auth user id
             wilaya_id: "",
             etat_id: "",
-            demande_id : "",
+            demande_id: "",
             prix_offert: "",
             note: "",
         },
+        data : null ,
     }),
     created() {
-        this.getWilayas();
-        this.getEtat();
         this.getDemande();
-        console.log(this.demande.id)
-        // this.demande_id = this.demande.id;
-
+        this.getWilayas();
+        console.log(this.wilayas)
+        this.getEtat();
     },
+    mounted(){
+    //   this.wilaya = this.wilayas.find(v => v.code == this.data.demande.wilaya_id).name
+    },
+
     methods: {
         getWilayas() {
             axios
                 .get(route("wilaya.index"))
                 .then((repsponse) => {
-                    this.wilayas = repsponse.data;
+                    this.wilayas =   repsponse.data;
+                    console.log(this.wilayas)
+                    // this.wilaya = this.wilayas.find(v => v.code == this.data.demande.wilaya_id).name
+
                 })
                 .catch((error) => {
                     console.log(error);
@@ -199,25 +182,28 @@ export default {
             axios
                 .get(route("demande.show", this.$route.params))
                 .then((repsponse) => {
-                    this.demande = repsponse.data;
-                    console.log(this.demande);
+                    // return repsponse.data[0];
+                    this.data = repsponse.data[0];
                 })
                 .catch(() => {
                     return ["no data found"];
                 });
         },
-        SubmitOffer(){
-             axios
-                .post(route("demande.offer" ,this.demande.data.id),{
-                        offer : this.offer })
+        SubmitOffer() {
+            axios
+                .post(route("demande.offer", this.data.demande.id), {
+                    offer: this.offer,
+                })
                 .then((repsponse) => {
-                    // this.demande = repsponse.data;
-                    // console.log(this.demande);
+                       if(response.status == 200){
+                    //    console.log(response.data.demande_id)
+                   this.$swal('Offre sur la demande '+response.data.demande_id+' créé avec succés!');
+                    }
                 })
                 .catch(() => {
                     return ["no data found"];
                 });
-        }
+        },
     },
 };
 </script>

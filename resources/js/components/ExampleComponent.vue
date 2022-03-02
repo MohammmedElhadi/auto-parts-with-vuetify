@@ -2,19 +2,28 @@
     <v-container>
         <v-btn color="primary" @click="diraction()"> diraction</v-btn>
         <v-btn color="primary" @click="light()"> theme</v-btn>
+          <v-autocomplete
+                                dense
+                                :items="dd"
+                                item-text="name"
 
+                                label="Etat de la pièce"
+                                prepend-icon="mdi-circle"
+
+
+                            >
+                            </v-autocomplete>
     </v-container>
 </template>
 
 <script>
-import demandModal from "./demandModal.vue";
-import Notifications from './notifications.vue';
 export default {
+        props :['dd'],
+        mounted(){
+            console.log('mounted');
+            console.log(this.dd);
+        },
 
-    components: { demandModal, Notifications },
-    mounted() {
-        console.log("Component mounted.");
-    },
 
 
     methods: {

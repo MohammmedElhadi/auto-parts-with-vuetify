@@ -3,7 +3,7 @@
         <v-row align="stretch">
             <v-col cols="12" md="6" lg="4" xl="4" v-for="(demande, index) in demandes" :key="index">
                 <div class="my-1 mx-1"></div>
-                <demande :demande = "demande" :etats="etats" :wilayas="wilayas" ></demande>
+                <demande :demande = "demande"  :wilayas="wilayas" :etats="etats" ></demande>
             </v-col>
         </v-row>
 
@@ -11,19 +11,17 @@
 </template>
 <script>
 import Demande from '../components/Demande.vue'
-// import { store } from  '../global.js'
 export default {
   components: { Demande },
-
   data: () => ( {
-    demandes : [],
-    wilayas : [],
-    etats : []
+      demandes : [],
+       etats: [],
+        wilayas: [],
   }),
    methods: {
         getDemandes() {
             axios
-                .get(route("demande.index"))
+                .get(route("demande.mine"))
                 .then((repsponse) => {
                     this.demandes = repsponse.data;
                 })
@@ -31,17 +29,17 @@ export default {
                     console.log(error);
                 });
         },
-         getWilayas() {
+        getWilayas() {
             axios
                 .get(route("wilaya.index"))
                 .then((repsponse) => {
-                   this.wilayas = repsponse.data;
+                    this.wilayas = repsponse.data;
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
-        getEtats() {
+        getEtat() {
             axios
                 .get(route("etat.index"))
                 .then((repsponse) => {
@@ -53,12 +51,9 @@ export default {
         },
    },
   created(){
-    this.getDemandes();
-    this.getWilayas();
-    this.getEtats();
-
-    //   console.log(this.store.wilayas)
-
+        this.getDemandes();
+        this.getWilayas();
+        this.getEtat();
   },
 
 }

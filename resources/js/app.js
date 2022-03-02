@@ -1,7 +1,6 @@
 /* resources > js > app.js */
 
 require('./bootstrap');
-
 import Vue from 'vue'
 import router from './router.js';
 Vue.component('app-init', require('./AppInit.vue').default);
@@ -31,17 +30,27 @@ window.Pusher = require('pusher-js');
     wsPort: 6001,
  });
  import Toasted from 'vue-toasted';
+Vue.use(Toasted)
 
- Vue.use(Toasted)
 
+//  import Vuex from 'vuex'
+//  Vue.use(Vuex)
+
+// const store = new Vuex.Store({
+//     state: {
+//         count: 0
+//     },
+//     mutations: {
+//         increment(state) {
+//             state.count++
+//         }
+//     }
+// });
 
 const app = new Vue({
     el: '#app',
     router,
     vuetify: new Vuetify(),
-    data: {
-        vueVar: document.getElementById('content').innerHTML + 'from Vue'
-    }
 });
 
 

@@ -23,7 +23,7 @@
                         </v-list-item-avatar> -->
 
                     <v-list-item-content>
-                        <v-list-item-title>Demande qui conserne {{item.demande.types[0].nom_fr}}</v-list-item-title>
+                        <v-list-item-title>Demande {{item.demande.id}} qui conserne {{item.demande.types[0].nom_fr}}</v-list-item-title>
                     </v-list-item-content>
 
                     <v-list-item-action >
@@ -45,29 +45,12 @@
 <script>
 export default {
     props: ["notifications"],
-    // methods : {
-    //       getNotifications() {
-    //         axios
-    //             .get(route("notification.index"))
-    //             .then((repsponse) => {
-    //                 // console.log(repsponse.data)
-    //             //    return repsponse.data;
-    //                 this.notifications = repsponse.data;
-    //                 // console.log(this.notifications[0].data.demande);
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error);
-    //                 return ['no data found'];
-    //             });
-    //     },
-    // },
+
     created() {
-        // console.log(this.notifications);
+
     },
     computed: {
         items() {
-            //   this.getNotifications();
-            //   const notis = this.notifications;
             return this.notifications;
         },
     },
