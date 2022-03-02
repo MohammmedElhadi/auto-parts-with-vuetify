@@ -9,6 +9,7 @@ use App\Http\Controllers\api\MarqueController;
 use App\Http\Controllers\api\NotificationController;
 use App\Http\Controllers\api\SubcategoryController;
 use App\Http\Controllers\api\TypeController as ApiTypeController;
+use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\WilayaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Http\Request;
@@ -41,6 +42,11 @@ Route::controller(SubcategoryController::class)->group(function () {
 });
 Route::controller(DemandeController::class)->group(function () {
     Route::post('demande/{id}/offer','SubmitOffer')->name('demande.offer');
+    Route::get('demande/my_demandes','MyDemandes')->name('demande.mine');
+
+});
+Route::controller(UserController::class)->group(function () {
+    Route::post('user/','store')->name('user.store');
 });
 Route::resource('marque',MarqueController::class);
 Route::resource('category', CategoryController::class);

@@ -10,12 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
 </head>
 <body>
-    <div id="content" hidden>
-        Hello world
-    </div>
 <div id="app">
     <app-init>
-
     </app-init>
 </div>
 <a href="{{route('login')}}">login</a>

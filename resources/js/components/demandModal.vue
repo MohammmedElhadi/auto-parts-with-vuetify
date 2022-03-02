@@ -167,15 +167,6 @@
                                                 filled
                                                 prepend-icon="mdi-camera"
                                              />
-
-                                        </v-col>
-                                        <v-col  cols="12">
-                                        <v-img
-                                        v-show="demand.image"
-                                        :src="url"
-                                        aspect-ratio="1.4"
-                                        class="grey darken-4"
-                                        ></v-img>
                                         </v-col>
                                     </v-row>
                                 </v-stepper-content>

@@ -18,6 +18,14 @@
                         <v-list-item-title>Demandes</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link :to="{ name: 'my-demandes' }">
+                    <v-list-item-action>
+                        <v-icon>mdi-buffer</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Mes Demandes</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link :to="{ name: 'products' }">
                     <v-list-item-action>
                         <v-icon>mdi-buffer</v-icon>
@@ -51,8 +59,8 @@
             >
 
 
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn v-bind="attrs" v-on="on" icon>
+                <template  v-slot:activator="{ on, attrs }">
+                    <v-btn class="mx-3" v-bind="attrs" v-on="on" icon>
                         <v-badge
                             v-if="notifications"
                             :content="notifications_count"
@@ -94,7 +102,6 @@ export default {
         drawer: null,
         notifications: null,
         notificationKey: 0,
-
     }),
     methods: {
         forceRerenderNotifications() {
@@ -105,7 +112,7 @@ export default {
                 .get(route("notification.index"))
                 .then((repsponse) => {
                     this.notifications = repsponse.data;
-                    // console.log(this.notifications[0]);
+                   //console.log(repsponse.data);
                 })
                 .catch((error) => {
                     console.log(error);

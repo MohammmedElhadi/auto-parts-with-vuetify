@@ -6,6 +6,7 @@ use App\Events\NewDemandeAdded;
 use App\Http\Controllers\Controller;
 use App\Models\Demande;
 use App\Models\Reponse;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,6 @@ class DemandeController extends Controller
      */
     public function index()
     {
-
         $data = [];
             foreach (Demande::orderBy('created_at' , "desc")->get() as $demande)
             {
@@ -33,11 +33,9 @@ class DemandeController extends Controller
                     'subcategory2'    =>$demande->subcategory2s ? $demande->subcategory2s->first() : '',
                     'marque'    =>$demande->marques ?   $demande->marques->first() : '',
                     'modele'    =>$demande->modeles ? $demande->modeles->first() : '',
+                    'offers'    =>$demande->reponses()->pluck('id')
                 ]);
             }
-
-        // return response()->json(5);
-        // return response()->json(Demande::all());
         return $data;
     }
 
@@ -108,12 +106,20 @@ class DemandeController extends Controller
      */
     public function show($id)
     {
-        //dd(Demande::find($id));
         $demande = Demande::find($id);
-        return response()->json([
-            'data' => $demande,
-            'type'    => $demande->types[0]
-        ]);
+        $data = [];
+            array_push($data , [
+                'demande' => $demande,
+                'type'    => $demande->types ? $demande->types[0] : '',
+                'category'    => $demande->categories ? $demande->categories->first(): '',
+                'subcategory'    =>$demande->subcategories?  $demande->subcategories->first() : '',
+                'subcategory2'    =>$demande->subcategory2s ? $demande->subcategory2s->first() : '',
+                'marque'    =>$demande->marques ?   $demande->marques->first() : '',
+                'modele'    =>$demande->modeles ? $demande->modeles->first() : '',
+            ]);
+    // return response()->json(5);
+    // return response()->json(Demande::all());
+    return response()->json($data);
     }
 
     /**
@@ -149,7 +155,30 @@ class DemandeController extends Controller
     {
         //
     }
+    /**
+     * show only my demandes
+     */
+    public function myDemandes()
+    {
+        // $demandes =  Auth::user()->demandes;
+        $demandes =  User::find(1)->demandes;
+        $data = [];
+        foreach ($demandes as $demande)
+        {
+            // dd($demande->marques->first());
+            array_push($data , [
+                'demande' => $demande,
+                'type'    => $demande->types ? $demande->types[0] : '',
+                'category'    => $demande->categories ? $demande->categories->first(): '',
+                'subcategory'    =>$demande->subcategories?  $demande->subcategories->first() : '',
+                'subcategory2'    =>$demande->subcategory2s ? $demande->subcategory2s->first() : '',
+                'marque'    =>$demande->marques ?   $demande->marques->first() : '',
+                'modele'    =>$demande->modeles ? $demande->modeles->first() : '',
+            ]);
+        }
+    return $data;
 
+    }
 
     public function SubmitOffer(Request $request)
     {

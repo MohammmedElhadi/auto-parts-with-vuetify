@@ -48,10 +48,10 @@
     </v-card>
     <v-expansion-panels  accordion >
             <v-expansion-panel>
-                <v-expansion-panel-header @click="getOffer()"> Donner un offre </v-expansion-panel-header>
+                <v-expansion-panel-header v-> Donner un offre </v-expansion-panel-header>
                 <v-expansion-panel-content>
                     <v-row>
-                        <v-col ols="12">
+                        <v-col cols="12">
                             <v-autocomplete
                                 dense
                                 :items="wilayas"
@@ -133,11 +133,8 @@ export default {
     }),
     created() {
             this.offer.demande_id = this.demande.demande.id;
-         },
-    mounted(){
-        console.log('beform')
-        for (item in this.wilayas)
-             console.log(item)
+    },
+    beforeMount(){
         if(this.wilayas){
                  console.log(this.wilayas)
                 //  this.wilaya =this.wilayas.find(v => v.code == this.demande.demande.wilaya_id).name

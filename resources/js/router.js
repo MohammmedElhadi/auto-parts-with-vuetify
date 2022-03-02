@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Dashboard from './views/Dashboard'
 import Products from './views/Products'
 import DemandesList from './views/DemandesList'
+import MyDemandesList from './views/MyDemandesList'
 import DemandeDetail from './views/DemandeDetail'
 Vue.use(VueRouter);
 const routes = [
@@ -15,6 +16,11 @@ const routes = [
         path: '/api/demandes',
         name: 'demandes',
         component: DemandesList
+    },
+    {
+        path: '/api/demande/my_demandes',
+        name: 'my-demandes',
+        component: MyDemandesList
     },
     {
         path: '/api/demandes/:id',
