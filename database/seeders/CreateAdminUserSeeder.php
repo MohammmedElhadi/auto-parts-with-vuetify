@@ -20,7 +20,7 @@ class CreateAdminUserSeeder extends Seeder
             'name' => 'Admin',
             'wilaya_id' => 5,
             'phone' => '0659403798',
-            'email' => 'admin@autoparts.com',
+            // 'email' => 'admin@autoparts.com',
             'is_admin' => true,
             'password' => bcrypt('password')
         ]);
@@ -38,7 +38,7 @@ class CreateAdminUserSeeder extends Seeder
             'name' => 'User2',
             'wilaya_id' => 5,
             'phone' => '0659403898',
-            'email' => 'user2@autoparts.com',
+            // 'email' => 'user2@autoparts.com',
             'is_admin' => false,
             'password' => bcrypt('password')
         ]);

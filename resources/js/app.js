@@ -11,8 +11,12 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 Vue.use(Vuetify)
 
+
+
 import { Form, HasError, AlertError } from 'vform'
 window.Form = Form;
+
+
 
 import VueSweetalert2 from 'vue-sweetalert2';
 // If you don't need the styles, do not connect
@@ -33,24 +37,16 @@ window.Pusher = require('pusher-js');
 Vue.use(Toasted)
 
 
-//  import Vuex from 'vuex'
-//  Vue.use(Vuex)
 
-// const store = new Vuex.Store({
-//     state: {
-//         count: 0
-//     },
-//     mutations: {
-//         increment(state) {
-//             state.count++
-//         }
-//     }
-// });
+import store from './store'
+
 
 const app = new Vue({
     el: '#app',
     router,
     vuetify: new Vuetify(),
+    store,
+
 });
 
 

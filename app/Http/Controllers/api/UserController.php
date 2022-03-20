@@ -5,6 +5,9 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -34,17 +37,28 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $data)
     {
-        $user = User::create($request->only(
-            "name" ,
-            "wilaya_id",
-            "phone",
-            "email",
+        dd($data);
+        DB::beginTransaction();
 
-        ));
-        return $request["types"];
-       return '11';
+        $user =  User::create([
+            'name' => $data['name'],
+            // 'email' => $data['email'],
+            'phone' => $data['phone'],
+            'password' => Hash::make($data['password']),
+            'wilaya_id' => $data['wilaya']
+        ]);
+        $user->types()->attach($data['types']);
+        $user->marques()->attach($data['marques']);
+        $user->modeles()->attach($data['modeles']);
+        $user->categories()->attach($data['categories']);
+        $user->subcategories()->attach($data['subcategories']);
+        $user->subcategories2()->attach($data['subsubcategories']);
+
+        DB::commit();
+        Auth::login($user);
+        return response()->json(Auth::user());
     }
 
     /**

@@ -125,6 +125,7 @@ export default {
         },
     },
     created() {
+        console.log(this.$store.state.count)
         this.$vuetify.theme.dark = true;
         this.getNotifications();
         // this.$echo.private('App.Models.User.'+'12')

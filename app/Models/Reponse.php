@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\TypeNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,6 +35,10 @@ class Reponse extends Model
     }
     public function etat()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Etat::class);
+    }
+    public function notify_demander(){
+        $demander = $this->demande->demander;
+        $demander->notify(new TypeNotification($this));
     }
 }

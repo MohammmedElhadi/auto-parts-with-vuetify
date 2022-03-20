@@ -9,3 +9,9 @@ spatie migrations
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 
 rinvex
+
+php artisan serve --host=auto_parts.local --port=8080
+
+
+npm i vuex@3.6.2
+Session store not set on request. \Illuminate\Session\Middleware\StartSession::class
