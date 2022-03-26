@@ -7,8 +7,12 @@ spatie migrations
         Spatie\Permission\PermissionServiceProvider::class,
     ];
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
-
 rinvex
+
+
+>>hosts
+127.0.0.1   auto_parts.local
+127.0.0.1   frontend.auto_parts.local
 
 php artisan serve --host=auto_parts.local --port=8080
 

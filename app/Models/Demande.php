@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Events\NewDemandeAdded ;
 use App\Notifications\CategoryNotification;
 use App\Notifications\MarqueNotification;
 use App\Notifications\ModeleNotification;
-use App\Notifications\NewDemandeAdded;
 use App\Notifications\ReponseChoosenNotification;
 use App\Notifications\SubcategoryNotification;
 use App\Notifications\TypeNotification;
@@ -120,9 +120,7 @@ class Demande extends Model
 
     public function notify_interresters()
     {
-        // dd($this->type[0]->interesters);
         $demander = $this->demander;
-        // dd($demander->id);
         $ids = [];
         $modeles = $this->modeles;
         $marques = $this->marques;
@@ -189,6 +187,7 @@ class Demande extends Model
                 {
                     array_push($ids ,$user->id);
                     $user->notify(new TypeNotification($this));
+                    event(new NewDemandeAdded($this , $user->id));
                 }
             }
             }

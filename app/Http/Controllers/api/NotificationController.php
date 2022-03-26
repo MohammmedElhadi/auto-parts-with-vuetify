@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -17,7 +18,7 @@ class NotificationController extends Controller
     {
         // dd(User::find(12)->unreadNotifications()->latest()->get());
         $demandes = [];
-        foreach (User::find(12)->unreadNotifications()->latest()->take(10)->get() as $notification)
+        foreach (Auth::user()->unreadNotifications()->latest()->take(10)->get() as $notification)
         {
             $demande = [
                 'demande'=>$notification['data']['demande'],
@@ -25,7 +26,7 @@ class NotificationController extends Controller
             ];
             array_push($demandes , $demande);
         }
-        // dd($demandes);
+//         dd($demandes);
         return ($demandes);
     }
 

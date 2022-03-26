@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ReponseNotification;
 use App\Notifications\TypeNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ class Reponse extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function Responder()
+    public function responder()
     {
         return $this->belongsTo(User::class ,'user_id');
     }
@@ -39,6 +40,6 @@ class Reponse extends Model
     }
     public function notify_demander(){
         $demander = $this->demande->demander;
-        $demander->notify(new TypeNotification($this));
+        $demander->notify(new ReponseNotification($this));
     }
 }

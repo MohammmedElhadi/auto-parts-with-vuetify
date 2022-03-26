@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+use App\Notifications\TestNotification;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -13,9 +15,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/test', function () {
+    $user = User::find(11);
+    $user->notify(new TestNotification());
+});
 //
 //// Auth::routes();
 //
@@ -24,3 +27,4 @@ use Illuminate\Support\Facades\Auth;
 // Route::get('/{any}', function () {
 //     return view('welcome');
 // })->where('any', '.*');
+//Broadcast::routes();

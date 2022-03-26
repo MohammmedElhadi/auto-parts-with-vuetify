@@ -39,7 +39,6 @@ class UserController extends Controller
      */
     public function store(Request $data)
     {
-        dd($data);
         DB::beginTransaction();
 
         $user =  User::create([

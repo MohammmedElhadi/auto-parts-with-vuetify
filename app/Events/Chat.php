@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,26 +9,20 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
 
-class NewDemandeAdded implements ShouldBroadcast
+class Chat implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $data;
-
+    public $payload = 'Hello World!';
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($demande ,$id )
+    public function __construct()
     {
-        $this->data = [
-                        'demande' =>$demande,
-                        'id'      =>$id
-                     ];
-        // $this->demande = User::find(12)->notifications()->latest()->first()['data'];
+        //
     }
 
     /**
@@ -39,6 +32,10 @@ class NewDemandeAdded implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('demands_channel_'.$this->data['id']);
+        return new PrivateChannel('App.User.11');
+    }
+    public function broadcastAs()
+    {
+        return 'new-message-event';
     }
 }

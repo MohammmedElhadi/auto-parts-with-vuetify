@@ -18,11 +18,18 @@ class SubcategoryController extends Controller
         return response()->json(SubCategory::all());
     }
 
-    public function getSubSubCategories($id)
+    public function getSubSubCategories(Request $ids)
     {
-        // dd(Marque::find($id));
-        return response()->json(Subcategory::find($id)->subcategory2s);
+        $subcat = array();
+        $cats = Subcategory::find($ids);
+
+        foreach ($cats as $cat){
+            $subcat = array_merge($subcat , $cat->subcategory2s->toArray() );
+        }
+
+        return response()->json($subcat);
     }
+
     /**
      * Show the form for creating a new resource.
      *

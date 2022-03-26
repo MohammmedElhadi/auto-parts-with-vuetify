@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -13,7 +13,13 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    \Illuminate\Support\Facades\Auth::login(\http\Client\Curl\User::find($id));
-    return (int) $user->id === (int) $id;
+Broadcast::channel('demands_channel_{id}', function ($user, $id) {
+    return  Auth::id() ===  $user->id;
 });
+Broadcast::channel('reponses_channel_{id}', function ($user, $id) {
+    return  Auth::id() ===  $user->id;
+});
+
+// Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+//     return true;
+// });

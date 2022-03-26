@@ -19,14 +19,21 @@ class LoginController extends Controller
             'phone' => ['required'],
             'password' => ['required'],
         ]);
-        // dd($credentials);
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return Auth::user();
         }
-        return null;
-        // return back()->withErrors([
-        //     'email' => 'The provided credentials do not match our records.',
-        // ]);
+        return response()->json(null , 401);
+
+    }
+
+
+    public function logout(Request $request){
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+        return response()->json('success' , 200);
     }
 }

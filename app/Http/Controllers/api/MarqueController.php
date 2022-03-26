@@ -84,10 +84,16 @@ class MarqueController extends Controller
         //
     }
 
-    public function modeles($id)
+    public function getModeles(Request $ids)
     {
-        // dd(Marque::find($id));
-        return response()->json(Marque::find($id)->modeles);
+        $models = array();
+        $marques = Marque::find($ids);
+
+        foreach ($marques as $marque){
+            $models = array_merge($models , $marque->modeles->toArray() );
+        }
+
+        return response()->json($models);
     }
 
 }

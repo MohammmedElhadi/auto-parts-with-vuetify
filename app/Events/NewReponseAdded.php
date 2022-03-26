@@ -31,6 +31,6 @@ class NewReponseAdded implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('reponse-channel');
+        return new PrivateChannel('response_for_'.$this->reponse->user_id );
     }
 }

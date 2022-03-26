@@ -17,10 +17,16 @@ class CategoryController extends Controller
     {
         return response()->json(Category::all());
     }
-    public function getSubCategories($id)
+    public function getSubCategories(Request $ids)
     {
-        // dd(Marque::find($id));
-        return response()->json(Category::find($id)->subcategories);
+        $subcat = array();
+        $cats = Category::find($ids);
+        foreach ($cats as $cat){
+//            dd($cat->subcategories->toArray());
+            $subcat = array_merge($subcat , $cat->subcategories->toArray() );
+        }
+//        dd($subcat);
+        return response()->json($subcat);
     }
 
     /**

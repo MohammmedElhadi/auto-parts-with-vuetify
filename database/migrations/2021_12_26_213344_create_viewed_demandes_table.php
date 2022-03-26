@@ -21,7 +21,7 @@ class CreateViewedDemandesTable extends Migration
             $table->foreignId('demande_id')->constrained()
             ->onUpdate('cascade')
             ->onDelete('cascade');
-            $table->boolean('is_saved')->default(True);
+            $table->boolean('is_saved')->default(false);
             $table->timestamps();
         });
     }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\LoginController;
 use api\TypeController;
 use App\Http\Controllers\api\CategoryController;
 use App\Http\Controllers\api\auth\LoginController as Lcont;
@@ -19,6 +18,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use \Illuminate\Support\Facades\Broadcast;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,19 +32,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+//TODO:: Midlewares
 Route::controller(MarqueController::class)->group(function () {
-    Route::get('marque/{id}/modeles', 'modeles')->name('marque.modeles');
+    Route::post('marque/modele', 'getModeles')->name('marque.modeles');
 });
 Route::controller(CategoryController::class)->group(function () {
-    Route::get('category/{id}/subcategories', 'getSubCategories')->name('category.subcategories');
+    Route::post('category/subcategories', 'getSubCategories')->name('category.subcategories');
 });
 Route::controller(SubcategoryController::class)->group(function () {
-    Route::get('subcategory/{id}/subcategory2s', 'getSubSubCategories')->name('subcategory.subcategory2s');
+    Route::post('subcategory/subcategory2s', 'getSubSubCategories')->name('subcategory.subcategory2s');
 });
 Route::controller(DemandeController::class)->group(function () {
     Route::post('demande/{id}/offer', 'SubmitOffer')->name('demande.offer');
     Route::get('demande/my_demandes', 'MyDemandes')->name('demande.mine');
+    Route::get('demande/demandesvues', 'DemandesVues')->name('demande.mine');
+    Route::get('demande/demandesaime', 'DemandesAime')->name('demande.mine');
+    Route::get('demande/{id}/markAsSeen', 'MarkAsSeen')->name('demande.markAsSeen');
+    Route::get('demande/{id}/ToggleSaved', 'ToggleSaved')->name('demande.ToggleSaved');
+
 });
 Route::controller(ReponseController::class)->group(function () {
     Route::get('reponse/{id}', 'getMyOffer');
@@ -55,17 +61,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 Route::controller(Lcont::class)->group(function () {
     Route::post('/login', 'authenticate')->name('user.authenticate');
 });
 
+Route::controller(Lcont::class)->group(function () {
+    Route::post('/logout', 'logout')->name('user.logout');
+});
+
 Route::controller(UserController::class)->group(function () {
     Route::post('/register', 'store')->name('user.store');
 });
-
-
 
     Route::resource('demande', DemandeController::class);
     Route::resource('type', ApiTypeController::class);

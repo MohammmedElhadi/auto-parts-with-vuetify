@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Demande;
+use App\Models\Reponse;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +18,11 @@ class ReponseController extends Controller
     {
         $data = [];
         $reponses = Demande::find($demand_id)->reponses;
-        foreach ($reponses as $reponse){
-            array_push($data , ["reponse" => $reponse,
-                                        "etat"   => $reponse->etat->nom_fr,
-                                        "image"   => $reponse->image? asset('storage/'.$reponse->image->url) : null ,
-                                        "phone"   => Auth::check()? Auth::user()->phone : "00"]);
+        foreach ($reponses as $reponse) {
+            array_push($data, ["reponse" => $reponse,
+                "etat" => $reponse->etat->nom_fr,
+                "image" => $reponse->image ? asset('storage/' . $reponse->image->url) : null,
+                "phone" => $reponse->responder->phone]);
 
         }
         return response()->json($data);
@@ -30,11 +31,12 @@ class ReponseController extends Controller
     /**
      * Get my offer on this demande
      */
-    public function getMyOffer($demand_id){
+    public function getMyOffer($demand_id)
+    {
 
-        $reponse =  Demande::find($demand_id)->reponses()->where('user_id' , Auth::check()? Auth::id() : 1)->first();
+        $reponse = Demande::find($demand_id)->reponses()->where('user_id', Auth::id())->first();
         if ($reponse) {
-            $url = "storage/" . $reponse->image->url;
+            $url = $reponse->image ? "storage/" . $reponse->image->url : '';
             return response()->json(["reponse" => $reponse,
                 "image" => asset($url)
             ]);
@@ -65,7 +67,7 @@ class ReponseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -76,7 +78,7 @@ class ReponseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -87,7 +89,7 @@ class ReponseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -98,8 +100,8 @@ class ReponseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -110,11 +112,20 @@ class ReponseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $reponse = Reponse::find($id);
+        if ($reponse) {
+            if ($reponse->image) {
+                $reponse->image->deleteImage();
+                $reponse->image->delete();
+
+            }
+            $reponse->delete();
+        }
+        return response()->json(true);
     }
 }

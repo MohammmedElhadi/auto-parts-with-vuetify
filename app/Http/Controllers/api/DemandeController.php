@@ -27,16 +27,20 @@ class DemandeController extends Controller
 
         $data = [];
         foreach (Demande::orderBy('created_at', "desc")->get() as $demande) {
-            // dd($demande->marques->first());
             array_push($data, [
                 'demande' => $demande,
                 'type' => $demande->types ? $demande->types[0] : '',
-                'category' => $demande->categories ? $demande->categories->first() : '',
-                'subcategory' => $demande->subcategories ? $demande->subcategories->first() : '',
-                'subcategory2' => $demande->subcategory2s ? $demande->subcategory2s->first() : '',
-                'marque' => $demande->marques ? $demande->marques->first() : '',
-                'modele' => $demande->modeles ? $demande->modeles->first() : '',
-                'offers' => $demande->reponses()->pluck('id')
+                'categories' => $demande->categories ? $demande->categories : '',
+                'subcategories' => $demande->subcategories ? $demande->subcategories: '',
+                'subcategory2s' => $demande->subcategory2s ? $demande->subcategory2s : '',
+                'marques' => $demande->marques ? $demande->marques : '',
+                'modeles' => $demande->modeles ? $demande->modeles : '',
+                'image' => $demande->image?  asset('storage/'.$demande->image->url) : 'https://www.swag.de/fileadmin/revolution/slide-content-3.png',
+                "is_saved" => (Auth::check() and $demande->viewers()->wherePivot('user_id' ,Auth::id())->count() > 0) ?
+                                $demande->viewers()->where('user_id', Auth::id())->first()->pivot->is_saved
+                                :
+                                false,
+                'likes'   => $demande->viewers()->wherePivot('is_saved' , 1)->count(),
             ]);
         }
         return $data;
@@ -65,8 +69,7 @@ class DemandeController extends Controller
         try {
             //dd($request->demand);
             $demande = Demande::create([
-                'user_id' => 1,
-                // 'user_id'=> Auth::id(),
+                'user_id'=> Auth::id(),
                 'wilaya_id' => $request->wilaya,
                 // 'wilaya_id'=> Auth::user()->wilaya->id,
                 'etat_id' => $request->etat,
@@ -83,19 +86,17 @@ class DemandeController extends Controller
             }
 
 
-            $demande->categories()->attach($request['category']);
-            $demande->subcategories()->attach($request['subcategory']);
-            $demande->subcategory2s()->attach($request['subsubcategory']);
+            $demande->categories()->attach($request['categories']);
+            $demande->subcategories()->attach($request['subcategories']);
+            $demande->subcategory2s()->attach($request['subsubcategories']);
             $demande->marques()->attach(($request['marques']));
             $demande->modeles()->attach(($request['modeles']));
             $demande->types()->attach($request['type']);
 
             $demande->notify_interresters();
-            event(new NewDemandeAdded($demande));
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            dd($e);
         }
         return response()->json($demande->id);
     }
@@ -113,14 +114,14 @@ class DemandeController extends Controller
         array_push($data, [
             'demande' => $demande,
             'type' => $demande->types ? $demande->types[0] : '',
-            'category' => $demande->categories ? $demande->categories->first() : '',
-            'subcategory' => $demande->subcategories ? $demande->subcategories->first() : '',
-            'subcategory2' => $demande->subcategory2s ? $demande->subcategory2s->first() : '',
-            'marque' => $demande->marques ? $demande->marques->first() : '',
-            'modele' => $demande->modeles ? $demande->modeles->first() : '',
+            'categories' => $demande->categories ? $demande->categories : '',
+            'subcategories' => $demande->subcategories ? $demande->subcategories: '',
+            'subcategory2s' => $demande->subcategory2s ? $demande->subcategory2s : '',
+            'marques' => $demande->marques ? $demande->marques : '',
+            'modeles' => $demande->modeles ? $demande->modeles : '',
+            'image' => $demande->image?  asset('storage/'.$demande->image->url) : 'https://www.swag.de/fileadmin/revolution/slide-content-3.png'
+
         ]);
-        // return response()->json(5);
-        // return response()->json(Demande::all());
         return response()->json($data);
     }
 
@@ -163,11 +164,10 @@ class DemandeController extends Controller
      */
     public function myDemandes()
     {
-        // $demandes =  Auth::user()->demandes;
-        $demandes = User::find(1)->demandes;
+        $demandes = Auth::user()->demandes;
+
         $data = [];
         foreach ($demandes as $demande) {
-            // dd($demande->marques->first());
             array_push($data, [
                 'demande' => $demande,
                 'type' => $demande->types ? $demande->types[0] : '',
@@ -176,6 +176,60 @@ class DemandeController extends Controller
                 'subcategory2' => $demande->subcategory2s ? $demande->subcategory2s->first() : '',
                 'marque' => $demande->marques ? $demande->marques->first() : '',
                 'modele' => $demande->modeles ? $demande->modeles->first() : '',
+            ]);
+        }
+        return $data;
+
+    }
+    /**
+    show the demandes that I have seen*/
+    public function DemandesVues()
+    {
+        // $demandes =  Auth::user()->demandes;
+        $demandes = Auth::user()->viewedDemandes;
+        $data = [];
+        foreach ($demandes as $demande) {
+            array_push($data, [
+                'demande' => $demande,
+                'type' => $demande->types ? $demande->types[0] : '',
+                'categories' => $demande->categories ? $demande->categories : '',
+                'subcategories' => $demande->subcategories ? $demande->subcategories: '',
+                'subcategory2s' => $demande->subcategory2s ? $demande->subcategory2s : '',
+                'marques' => $demande->marques ? $demande->marques : '',
+                'modeles' => $demande->modeles ? $demande->modeles : '',
+                'image' => $demande->image?  asset('storage/'.$demande->image->url) : 'https://www.swag.de/fileadmin/revolution/slide-content-3.png',
+                "is_saved" => (Auth::check() and $demande->viewers()->wherePivot('user_id' ,Auth::id())->count() > 0) ?
+                    $demande->viewers()->where('user_id', Auth::id())->first()->pivot->is_saved
+                    :
+                    false,
+                'likes'   => $demande->viewers()->wherePivot('is_saved' , 1)->count(),
+            ]);
+        }
+        return $data;
+
+    }
+/**
+    show the demandes that I have liked*/
+    public function DemandesAime()
+    {
+        $demandes = Auth::user()->viewedDemandes()->wherePivot('is_saved' , 1)->get();
+
+        $data = [];
+        foreach ($demandes as $demande) {
+            array_push($data, [
+                'demande' => $demande,
+                'type' => $demande->types ? $demande->types[0] : '',
+                'categories' => $demande->categories ? $demande->categories : '',
+                'subcategories' => $demande->subcategories ? $demande->subcategories: '',
+                'subcategory2s' => $demande->subcategory2s ? $demande->subcategory2s : '',
+                'marques' => $demande->marques ? $demande->marques : '',
+                'modeles' => $demande->modeles ? $demande->modeles : '',
+                'image' => $demande->image?  asset('storage/'.$demande->image->url) : 'https://www.swag.de/fileadmin/revolution/slide-content-3.png',
+                "is_saved" => (Auth::check() and $demande->viewers()->wherePivot('user_id' ,Auth::id())->count() > 0) ?
+                    $demande->viewers()->where('user_id', Auth::id())->first()->pivot->is_saved
+                    :
+                    false,
+                'likes'   => $demande->viewers()->wherePivot('is_saved' , 1)->count(),
             ]);
         }
         return $data;
@@ -203,6 +257,7 @@ class DemandeController extends Controller
                     'imageable_type' => 'App\Models\Reponse'
                 ]);
             }
+
             DB::commit();
         }catch (Exception $e) {
             DB::rollBack();
@@ -213,4 +268,31 @@ class DemandeController extends Controller
         event(new NewReponseAdded($offer));
         return response()->json($offer);
     }
+
+    public function MarkAsSeen( $id){
+        $demande = Demande::findOrFail($id);
+        $demande->viewers()->attach( [Auth::id() => ['is_saved' => false]]);
+        return ($demande->viewers[0]->pivot->is_saved);
+    }
+
+    public function ToggleSaved($id)
+    {
+        $viewedDemande = Auth::user()->viewedDemandes()->where('demande_id', $id)->first();
+
+        if($viewedDemande != null) {
+            $viewedDemande->pivot->is_saved = !$viewedDemande->pivot->is_saved;
+            $viewedDemande->pivot->save();
+            return response()->json(['is_saved' => $viewedDemande->pivot->is_saved,
+                                     'likes'    => Demande::find($id)->viewers()->wherePivot('is_saved' , 1)->count() ]);
+        }
+        else{
+            Auth::user()->viewedDemandes()->attach( [$id =>['is_saved' => true] ]);
+            $viewedDemande = Auth::user()->viewedDemandes()->where('demande_id', $id)->first();
+            return response()->json(['is_saved' => $viewedDemande->pivot->is_saved,
+                                     'likes'    => Demande::find($id)->viewers()->wherePivot('is_saved' , 1)->count() ]);
+        }
+
+    }
+
+
 }
